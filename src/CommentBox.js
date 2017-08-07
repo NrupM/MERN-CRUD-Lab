@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import CommentBox from './CommentList';
+import CommentList from './CommentList';
 import CommentForm from './CommentForm';
 import DATA from '../data';
 import style from './style';
