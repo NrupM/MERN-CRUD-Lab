@@ -39,7 +39,12 @@ class CommentForm extends Component {
           placeholder='Say something...'
           style={ style.commentFormText }
           value={ this.state.text }
-          />
+          onChange={e => this.handleTextChange(e)} />
+        <input
+          type='submit'
+          style={ style.commentFormPost }
+          value='Post' />
+        </form>
       </div>
     )
   }
