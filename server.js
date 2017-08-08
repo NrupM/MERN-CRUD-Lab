@@ -1,17 +1,17 @@
 'use strict'
 
 //import dependencies
-var express = require('express'),
-    mongoose = require('mongoose'),
-    bodyParser = require('body-parser'),
-    Comment = require('./models/comment');
+const express = require('express');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const Comment = require('./models/comment');
 
 //create instances
-var app = express(),
-    router = express.Router();
+let app = express();
+let router = express.Router();
 
 // set port to env or 3000
-var port = process.env.API_PORT || 3001;
+let port = process.env.API_PORT || 3001;
 
 //db config
 mongoose.connect('mongodb://localhost/mern-comment-box');
@@ -37,14 +37,33 @@ router.get('/', function(req,res) {
   res.json({message: 'API Initialized!'});
 });
 
+//adding the /comments route to our /api router
+router.get('/comments', function(req, res) {
+  Comment.find(function(err, comments) {
+    if (err)
+      res.send(err)
+    res.json(comments)
+  });
+})
+
+router.post('/comments', function(req, res) {
+  let newComment = {
+    author: req.body.author,
+    text: req.body.text
+  };
+  Comment.create(newComment, function(err, comment) {
+    if(err)
+      res.send(err)
+    res.json(comment)
+  })
+})
+
 // delete all comments
 router.route('/nuke').get(function(req,res){
   Comment.remove(function(err,succ){
   res.json(succ);
   });
 });
-
-//add /comments route to our /api router here
 
 //use router config when we call /API
 app.use('/api', router);
