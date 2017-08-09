@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import $ from 'jquery-ajax';
 import CommentList from './CommentList';
 import CommentForm from './CommentForm';
 import style from './style';
@@ -9,6 +10,7 @@ class CommentBox extends Component {
     this.state = {
       data: []
     };
+    this.loadCommentsFromServer = this.loadCommentsFromServer.bind(this);
   }
   loadCommentsFromServer() {
     $.ajax({
@@ -23,21 +25,35 @@ class CommentBox extends Component {
       }
     );
   }
-  handleCommetSubmit(comment) {}
+  handleCommentSubmit(comment) {
+    $.ajax({
+      url: this.props.url,
+      method: 'POST',
+      data: comment
+    }).then(
+      res => {
+        this.setState({ data: res });
+      },
+      err => {
+        console.log('post error', err);
+      }
+    );
+  }
   componentDidMount() {
     this.loadCommentsFromServer();
-    setInterval(this.loadCommentsFromServer, this.props.pollInterval);
+    console.log('loaded first comment');
+    setInterval(() => this.loadCommentsFromServer, this.props.pollInterval);
   }
   render() {
     return (
       <div style={style.commentBox}>
         <CommentList data={this.state.data} />
-        <CommentForm onCommentSubmit={this.handleCommentSubmit.bind(this)} />
+        <CommentForm
+          onCommentSubmit={event => this.handleCommentSubmit(event)}
+        />
       </div>
     );
   }
 }
 
 export default CommentBox;
-
-//get comments from DB using AJAX and update the comment list with that data
