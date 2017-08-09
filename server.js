@@ -62,6 +62,32 @@ router
     });
   });
 
+//adding the put method to update our comment based on the ID passed to the route
+router
+  .route('/comments/:comment_id')
+  .put(function(req, res) {
+    Comment.findById(req.params.comment_id, function(err, comment) {
+      if (err) res.send(err);
+      //set the new author and text to what has changed
+      //if nothing changed, do not alter the field
+      req.body.author ? (comment.author = req.body.author) : null;
+      req.body.text ? (comment.text = req.body.text) : null;
+      //save comment
+      comment.save(function(err) {
+        if (err) res.sed(err);
+        res.json({ message: 'Comment has been updated' });
+      });
+    });
+  })
+  //delete method for removing a comment from the db
+  .delete(function(req, res) {
+    //select comment byId, then remove it
+    Comment.remove({ _id: req.params.comment_id }, function(err, comment) {
+      if (err) res.send(err);
+      res.json({ messsage: 'Comment has been deleted' });
+    });
+  });
+
 // delete all comments
 router.route('/nuke').get(function(req, res) {
   Comment.remove(function(err, succ) {

@@ -39,6 +39,30 @@ class CommentBox extends Component {
       }
     );
   }
+  handleCommentDelete(id){
+    $.ajax({
+      url: `${this.props.url}/${id}`
+      method: 'DELETE'
+    })
+    .then((res) => {
+      console.log('Comment deleted');
+    }, (err) => {
+      console.log(err);
+    });
+  }
+  handleCommentUpdate(id, comment) {
+    //sends the comment id and new author/text to api
+    $.ajx({
+      url: `${this.props.url}/${id}`,
+      method: 'put'
+      data: comment
+    })
+    .then(res => {
+      console.log(res);
+    }, err => {
+      console.log(err);
+    });
+  }
   componentDidMount() {
     this.loadCommentsFromServer();
     console.log('loaded first comment');
@@ -47,7 +71,11 @@ class CommentBox extends Component {
   render() {
     return (
       <div style={style.commentBox}>
-        <CommentList data={this.state.data} />
+        <CommentList
+          onCommentDelete={event => this.handleCommentDelete(event)}
+          onCommentUpdate={event => this.handleCommentUpdate(event)}
+          data={this.state.data}
+        />
         <CommentForm
           onCommentSubmit={event => this.handleCommentSubmit(event)}
         />
