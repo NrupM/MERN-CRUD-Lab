@@ -50,27 +50,35 @@ class Comment extends Component {
         <span>
           {this.props.text}
         </span>
-        <a style={style.updateLink} href="#" onClick={this.updateComment}>
+        <a
+          style={style.updateLink}
+          href="#"
+          onClick={event => this.updateComment(event)}
+        >
           update
         </a>
-        <a style={style.deleteLink} href="#" onClick={this.deleteComment}>
+        <a
+          style={style.deleteLink}
+          href="#"
+          onClick={event => this.deleteComment(event)}
+        >
           delete
         </a>
         {this.state.toBeUpdated
-          ? <form onSubmit={this.handleCommentUpdate}>
+          ? <form onSubmit={event => this.handleCommentUpdate(event)}>
               <input
                 type="text"
                 placeholder="Update name..."
                 style={style.commentFormAuthor}
                 value={this.state.author}
-                onChange={this.handleAuthorChange}
+                onChange={event => this.handleAuthorChange(event)}
               />
               <input
                 type="text"
                 placeholder="Update your comment..."
                 style={style.commentFormText}
                 value={this.state.text}
-                onChange={this.handleTextChange}
+                onChange={event => this.handleTextChange(event)}
               />
               <input
                 type="submit"

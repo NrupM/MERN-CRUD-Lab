@@ -32,7 +32,6 @@ class CommentForm extends Component {
   render() {
     return (
       <div>
-        <h2>Create Comment Here!</h2>
         <form style={style.commentForm} onSubmit={e => this.handleSubmit(e)}>
           <input
             type="text"

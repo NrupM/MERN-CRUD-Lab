@@ -10,7 +10,6 @@ class CommentBox extends Component {
     this.state = {
       data: []
     };
-    this.loadCommentsFromServer = this.loadCommentsFromServer.bind(this);
   }
   loadCommentsFromServer() {
     $.ajax({
@@ -39,29 +38,33 @@ class CommentBox extends Component {
       }
     );
   }
-  handleCommentDelete(id){
+  handleCommentDelete(id) {
     $.ajax({
-      url: `${this.props.url}/${id}`
+      url: `${this.props.url}/${id}`,
       method: 'DELETE'
-    })
-    .then((res) => {
-      console.log('Comment deleted');
-    }, (err) => {
-      console.log(err);
-    });
+    }).then(
+      res => {
+        console.log('Comment deleted');
+      },
+      err => {
+        console.log(err);
+      }
+    );
   }
   handleCommentUpdate(id, comment) {
     //sends the comment id and new author/text to api
     $.ajx({
       url: `${this.props.url}/${id}`,
-      method: 'put'
+      method: 'put',
       data: comment
-    })
-    .then(res => {
-      console.log(res);
-    }, err => {
-      console.log(err);
-    });
+    }).then(
+      res => {
+        console.log(res);
+      },
+      err => {
+        console.log(err);
+      }
+    );
   }
   componentDidMount() {
     this.loadCommentsFromServer();
