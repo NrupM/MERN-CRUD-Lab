@@ -13,7 +13,9 @@ class CommentList extends Component {
           onCommentUpdate={this.props.onCommentUpdate}
           key={comment['_id']}
           text={comment.text}
-        />
+        >
+          {comment.text}
+        </Comment>
       );
     });
     return (

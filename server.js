@@ -4,7 +4,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const Comment = require('./models/comment');
+const db = require('./models');
 
 //create instances
 let app = express();
@@ -46,7 +46,7 @@ router.get('/', function(req, res) {
 //adding the /comments route to our /api router
 router
   .get('/comments', function(req, res) {
-    Comment.find(function(err, comments) {
+    db.Comment.find(function(err, comments) {
       if (err) res.send(err);
       res.json(comments);
     });
@@ -56,7 +56,7 @@ router
       author: req.body.author,
       text: req.body.text
     };
-    Comment.create(newComment, function(err, comment) {
+    db.Comment.create(newComment, function(err, comment) {
       if (err) res.send(err);
       res.json(comment);
     });
@@ -66,7 +66,7 @@ router
 router
   .route('/comments/:comment_id')
   .put(function(req, res) {
-    Comment.findById(req.params.comment_id, function(err, comment) {
+    db.Comment.findById(req.params.comment_id, function(err, comment) {
       if (err) res.send(err);
       //set the new author and text to what has changed
       //if nothing changed, do not alter the field
@@ -82,7 +82,7 @@ router
   //delete method for removing a comment from the db
   .delete(function(req, res) {
     //select comment byId, then remove it
-    Comment.remove({ _id: req.params.comment_id }, function(err, comment) {
+    db.Comment.remove({ _id: req.params.comment_id }, function(err, comment) {
       if (err) res.send(err);
       res.json({ messsage: 'Comment has been deleted' });
     });
@@ -90,7 +90,7 @@ router
 
 // delete all comments
 router.route('/nuke').get(function(req, res) {
-  Comment.remove(function(err, succ) {
+  db.Comment.remove(function(err, succ) {
     res.json(succ);
   });
 });
